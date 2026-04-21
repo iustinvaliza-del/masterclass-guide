@@ -520,7 +520,7 @@ Apply the design system consistently across all cards, typography, spacing, and 
         <div class="suggestion-card" onclick="openModal('Wikipedia of the day','📖','ag','Add a Wikipedia featured article card to my bento. Fetch today\'s featured article from the Wikipedia API (https://en.wikipedia.org/api/rest_v1/feed/featured/YYYY/MM/DD). Show the article title, a one-sentence extract, and the thumbnail image. Link to the full article. Match the existing design system exactly.')">
           <span class="icon">📖</span> Wikipedia of the day <span class="tool-pill pill-ag">AG</span>
         </div>
-        <div class="suggestion-card" onclick="openModal('News headlines','📰','cc','Read the existing index.html, script.js, and style.css. Then:\n\n1. Add a Live News card to the bento with 5 headline items (title + source). In script.js add fetchNews() that calls http://localhost:3000/api/news on load, refreshing every 5 minutes.\n\n2. Create server/server.js — Express on port 3000 that fetches BBC News, TechCrunch, and Hacker News RSS using rss-parser. Print headlines to terminal with chalk on startup. Expose /api/news as JSON. Enable CORS.\n\n3. Create server/package.json with: express, rss-parser, chalk, cors.\n\n4. Create start.bat that starts the server in the background, waits 2 seconds, then opens index.html in the browser.')">
+        <div class="suggestion-card" onclick="openModal('News headlines','📰','cc','Read the existing index.html, script.js, and style.css. Then:\n\n1. Add a Live News card to the bento with 10 headline items (title + source). In script.js add fetchNews() that calls http://localhost:3000/api/news on load, refreshing every 1 minute.\n\n2. Create server/server.js — Express on port 3000 that fetches from 7 RSS feeds using rss-parser: BBC News, TechCrunch, Hacker News, Reuters, The Guardian, Wired, and Ars Technica. Print headlines to terminal with chalk on startup. Expose /api/news as JSON. Enable CORS.\n\n3. Create server/package.json with: express, rss-parser, chalk, cors.\n\n4. Create start.bat that starts the server in the background, waits 2 seconds, then opens index.html in the browser.')">
           <span class="icon">📰</span> News headlines <span class="tool-pill pill-cc">CC</span>
         </div>
         <div class="suggestion-card" onclick="openModal('Mini calendar','📆','ag','Add a mini calendar card to my bento. Show the current month as a grid with day names (Mon–Sun). Highlight today\'s date with the accent color from the design system. Navigation arrows to go to previous/next month. Pure frontend, no API needed. Match the existing design system exactly.')">
@@ -555,10 +555,10 @@ Apply the design system consistently across all cards, typography, spacing, and 
         <div class="prompt-text" id="p3">Read the existing index.html, script.js, and style.css. Then do the following:
 
 1. Add a news card to the bento.
-Add a new card to index.html: a "Live News" section with 5 headline items (title + source). In script.js, add a fetchNews() function that calls http://localhost:3000/api/news and populates the card on load, refreshing every 5 minutes.
+Add a new card to index.html: a "Live News" section with 10 headline items (title + source). In script.js, add a fetchNews() function that calls http://localhost:3000/api/news and populates the card on load, refreshing every 1 minute.
 
 2. Build the backend.
-Create server/server.js — an Express server on port 3000 that fetches the latest headlines from BBC News, TechCrunch, and Hacker News RSS feeds using rss-parser. On startup, print each headline to the terminal with chalk: source in color, headline text, time posted. Expose /api/news returning JSON. Enable CORS.
+Create server/server.js — an Express server on port 3000 that fetches the latest headlines from these 7 RSS feeds using rss-parser: BBC News, TechCrunch, Hacker News, Reuters, The Guardian, Wired, and Ars Technica. On startup, print each headline to the terminal with chalk: source in color, headline text, time posted. Expose /api/news returning JSON. Enable CORS.
 
 3. Create server/package.json with dependencies: express, rss-parser, chalk, cors.
 
