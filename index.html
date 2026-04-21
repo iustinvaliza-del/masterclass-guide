@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Masterclass — Prompt Guide</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --border: #1e1e2e;
+      --text: #e2e2f0;
+      --muted: #6b6b8a;
+      --ag-color: #4f8ef7;
+      --ag-glow: rgba(79,142,247,0.15);
+      --cc-color: #f97316;
+      --cc-glow: rgba(249,115,22,0.15);
+      --green: #22c55e;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 2rem 1rem 4rem;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .header .eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+    .header h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff 40%, var(--muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+    .header p {
+      margin-top: 0.75rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      max-width: 820px;
+      margin: 0 auto 2rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.35rem;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 0.65rem 1rem;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active-ag { background: var(--ag-glow); color: var(--ag-color); border: 1px solid rgba(79,142,247,0.3); }
+    .tab-btn.active-cc { background: var(--cc-glow); color: var(--cc-color); border: 1px solid rgba(249,115,22,0.3); }
+    .tab-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+    .tab-content { display: none; max-width: 820px; margin: 0 auto; }
+    .tab-content.active { display: block; }
+
+    .step { margin-bottom: 1.75rem; }
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .step-num {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .step-num.ag { background: var(--ag-glow); color: var(--ag-color); border: 1px solid rgba(79,142,247,0.3); }
+    .step-num.cc { background: var(--cc-glow); color: var(--cc-color); border: 1px solid rgba(249,115,22,0.3); }
+    .step-header h2 { font-size: 1rem; font-weight: 600; color: var(--text); }
+
+    .badge { font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 99px; font-weight: 600; }
+    .badge-chatgpt { background: rgba(16,163,127,0.15); color: #10a37f; border: 1px solid rgba(16,163,127,0.3); }
+    .badge-ag { background: var(--ag-glow); color: var(--ag-color); border: 1px solid rgba(79,142,247,0.3); }
+    .badge-cc { background: var(--cc-glow); color: var(--cc-color); border: 1px solid rgba(249,115,22,0.3); }
+
+    .prompt-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .prompt-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+    .prompt-block-header span {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .copy-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .copy-btn:hover { color: var(--text); border-color: #3a3a5c; }
+    .copy-btn.copied { color: var(--green); border-color: var(--green); }
+
+    .prompt-text {
+      padding: 1.25rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      line-height: 1.75;
+      color: #c9c9e8;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .prompt-text .highlight { color: #fbbf24; font-weight: 500; }
+
+    .tip {
+      display: flex;
+      gap: 0.75rem;
+      padding: 0.9rem 1rem;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-top: 0.75rem;
+      font-size: 0.84rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .tip-icon { flex-shrink: 0; font-size: 1rem; }
+
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+    .divider { height: 1px; background: var(--border); margin: 2rem 0; }
+
+    /* SUGGESTIONS */
+    .suggestions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+    }
+    .suggestion-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      font-size: 0.83rem;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      user-select: none;
+    }
+    .suggestion-card:hover {
+      border-color: var(--ag-color);
+      background: var(--ag-glow);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+    .suggestion-card .icon { font-size: 1rem; flex-shrink: 0; }
+    .suggestion-card .tool-pill {
+      margin-left: auto;
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+    .pill-ag { background: var(--ag-glow); color: var(--ag-color); border: 1px solid rgba(79,142,247,0.3); }
+    .pill-cc { background: var(--cc-glow); color: var(--cc-color); border: 1px solid rgba(249,115,22,0.3); }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #13131f;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 600px;
+      max-height: 85vh;
+      overflow-y: auto;
+      animation: modalIn 0.2s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-title {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    .modal-icon { font-size: 1.2rem; }
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 1.2rem;
+      padding: 0.25rem;
+      line-height: 1;
+      transition: color 0.15s;
+    }
+    .modal-close:hover { color: var(--text); }
+    .modal-body { padding: 1.25rem; }
+    .modal-tool-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .modal-prompt {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .modal-prompt-header {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-prompt-text {
+      padding: 1rem 1.1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      line-height: 1.7;
+      color: #c9c9e8;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* BEST PRACTICES */
+    .practices-list { display: flex; flex-direction: column; gap: 0.6rem; }
+    .practice {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      padding: 0.85rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .practice-num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--cc-color);
+      background: var(--cc-glow);
+      border: 1px solid rgba(249,115,22,0.3);
+      border-radius: 6px;
+      padding: 0.15rem 0.45rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .practice-text strong { display: block; font-size: 0.88rem; margin-bottom: 0.2rem; }
+    .practice-text span { font-size: 0.8rem; color: var(--muted); }
+
+    @media (max-width: 600px) {
+      .tabs { flex-direction: column; }
+      .suggestions-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <p class="eyebrow">IESE AI Masterclass · April 2026</p>
+    <h1>Build with AI.<br>No experience needed.</h1>
+    <p>Follow the steps below. Copy the prompts. See what happens.</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active-ag" onclick="switchTab('ag', this)">
+      <span class="tab-dot"></span> Antigravity
+    </button>
+    <button class="tab-btn" onclick="switchTab('cc', this)">
+      <span class="tab-dot"></span> Claude Code
+    </button>
+  </div>
+
+  <!-- ANTIGRAVITY TAB -->
+  <div class="tab-content active" id="tab-ag">
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num ag">1</div>
+        <h2>Generate your design system</h2>
+        <span class="badge badge-chatgpt">ChatGPT</span>
+      </div>
+      <p class="section-label">Paste this into ChatGPT — describe your vibe where indicated</p>
+      <div class="prompt-block">
+        <div class="prompt-block-header">
+          <span>Prompt</span>
+          <button class="copy-btn" onclick="copyPrompt(this, 'p1')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copy
+          </button>
+        </div>
+        <div class="prompt-text" id="p1">I want to build a personal dashboard. Generate a complete UI design system based on this vibe: <span class="highlight">[describe your aesthetic — e.g. dark minimal, warm earthy, clean futuristic, bold red luxury]</span>
+
+Include:
+- Color palette with hex codes
+- Typography (font names + sizes)
+- Border radius and spacing
+- Card styles and button styles
+
+Format it clearly so I can paste it directly into an AI app builder as a reference.</div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon">💡</span>
+        <span>Be specific about your vibe — "dark minimal with gold accents" gives a better result than just "dark". ChatGPT will also generate a visual reference image.</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num ag">2</div>
+        <h2>Build your personal bento board</h2>
+        <span class="badge badge-ag">Antigravity</span>
+      </div>
+      <p class="section-label">Attach the design system image from ChatGPT, then paste this prompt</p>
+      <div class="prompt-block">
+        <div class="prompt-block-header">
+          <span>Prompt</span>
+          <button class="copy-btn" onclick="copyPrompt(this, 'p2')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2v1"/></svg>
+            Copy
+          </button>
+        </div>
+        <div class="prompt-text" id="p2">Build a personal bento dashboard using the attached design system as reference. Generate an AI background image that matches the mood, colors, and aesthetic defined in the design system.
+
+Widgets to include:
+- Live clock with smooth seconds animation
+- Greeting with editable name + date
+- Top 3 tasks for today (checkable, editable)
+- Scratchpad (auto-saves)
+- Bookmarks / daily links (defaults: LinkedIn, Notion, Gmail, IESE Portal (https://my.iese.edu/), Claude (https://claude.ai), ChatGPT (https://chat.openai.com), Gemini (https://gemini.google.com))
+- Countdown card (default event: "End of Year 1", default date: May 30, 2026; fully editable)
+- Mini habit tracker (3 habits with daily checkboxes)
+- Daily quote (rotates from a list)
+
+Animations:
+- Cards fade and slide up on load, staggered
+- Card lift + glow on hover using accent colors from the design system
+- Quote fades in smoothly
+- Checked tasks get a strikethrough animation
+- Background has a very slow ambient drift using the design system's primary colors
+
+Apply the design system consistently across all cards, typography, spacing, and colors. Bento grid layout, mobile responsive.</div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon">💡</span>
+        <span>Antigravity will generate the background image automatically to match your design system. Every student gets a unique result.</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num ag">+</div>
+        <h2>What can you add next?</h2>
+      </div>
+      <p class="section-label">Click any card to get the prompt — paste it into Antigravity or Claude Code</p>
+      <div class="suggestions-grid">
+        <div class="suggestion-card" onclick="openModal('Weather widget','🌤','ag','Add a weather widget card to my bento. Use the Open Meteo API (https://api.open-meteo.com) — auto-detect the user\'s location via browser geolocation. Show current temperature, weather condition icon, and city name. Refresh every 10 minutes. Match the existing design system exactly.')">
+          <span class="icon">🌤</span> Weather widget <span class="tool-pill pill-ag">AG</span>
+        </div>
+        <div class="suggestion-card" onclick="openModal('Pomodoro timer','🍅','ag','Add a Pomodoro timer card to my bento. 25-minute focus session, then a 5-minute break. Large countdown display, Start / Pause / Reset buttons. Play a soft sound when the timer ends. Match the existing design system exactly.')">
+          <span class="icon">🍅</span> Pomodoro timer <span class="tool-pill pill-ag">AG</span>
+        </div>
+        <div class="suggestion-card" onclick="openModal('Habit streaks','🔥','ag','Upgrade the habit tracker in my bento to show streak counts. Track how many consecutive days each habit has been completed. Store streak data in localStorage and reset if a day is missed. Show a flame icon next to each habit with the streak number. Match the existing design system exactly.')">
+          <span class="icon">🔥</span> Habit streaks <span class="tool-pill pill-ag">AG</span>
+        </div>
+        <div class="suggestion-card" onclick="openModal('Crypto ticker','₿','ag','Add a crypto price ticker card to my bento. Fetch Bitcoin, Ethereum, and Solana prices from the CoinGecko public API (https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum,solana) — no API key needed. Show price and 24h % change in green (up) or red (down). Refresh every 60 seconds. Match the existing design system exactly.')">
+          <span class="icon">₿</span> Crypto ticker <span class="tool-pill pill-ag">AG</span>
+        </div>
+        <div class="suggestion-card" onclick="openModal('Expense tracker','💸','ag','Add a mini expense tracker card to my bento. Input field for amount and a category dropdown (Food, Transport, Study, Social, Other). Show total spent today and this week. List the last 5 entries. Store everything in localStorage. Match the existing design system exactly.')">
+          <span class="icon">💸</span> Expense tracker <span class="tool-pill pill-ag">AG</span>
+        </div>
+        <div class="suggestion-card" onclick="openModal('Goal progress bar','🎯','ag','Add a goal progress card to my bento. Editable goal name, current value input, and target value. Animated progress bar that fills based on progress percentage. Show the percentage complete and a motivational label when 100% is reached. Store in localStorage. Match the existing design system exactly.')">
+          <span class="icon">🎯</span> Goal progress bar <span class="tool-pill pill-ag">AG</span>
+        </div>
+        <div class="suggestion-card" onclick="openModal('Wikipedia of the day','📖','ag','Add a Wikipedia featured article card to my bento. Fetch today\'s featured article from the Wikipedia API (https://en.wikipedia.org/api/rest_v1/feed/featured/YYYY/MM/DD). Show the article title, a one-sentence extract, and the thumbnail image. Link to the full article. Match the existing design system exactly.')">
+          <span class="icon">📖</span> Wikipedia of the day <span class="tool-pill pill-ag">AG</span>
+        </div>
+        <div class="suggestion-card" onclick="openModal('News headlines','📰','cc','Read the existing index.html, script.js, and style.css. Then:\n\n1. Add a Live News card to the bento with 5 headline items (title + source). In script.js add fetchNews() that calls http://localhost:3000/api/news on load, refreshing every 5 minutes.\n\n2. Create server/server.js — Express on port 3000 that fetches BBC News, TechCrunch, and Hacker News RSS using rss-parser. Print headlines to terminal with chalk on startup. Expose /api/news as JSON. Enable CORS.\n\n3. Create server/package.json with: express, rss-parser, chalk, cors.\n\n4. Create start.bat that starts the server in the background, waits 2 seconds, then opens index.html in the browser.')">
+          <span class="icon">📰</span> News headlines <span class="tool-pill pill-cc">CC</span>
+        </div>
+        <div class="suggestion-card" onclick="openModal('Mini calendar','📆','ag','Add a mini calendar card to my bento. Show the current month as a grid with day names (Mon–Sun). Highlight today\'s date with the accent color from the design system. Navigation arrows to go to previous/next month. Pure frontend, no API needed. Match the existing design system exactly.')">
+          <span class="icon">📆</span> Mini calendar <span class="tool-pill pill-ag">AG</span>
+        </div>
+        <div class="suggestion-card" onclick="openModal('Dark mode toggle','🌙','ag','Add a dark/light mode toggle button to my bento (top-right corner). Switching modes should smoothly transition all card backgrounds, text, and borders. Store the preference in localStorage so it persists on reload. Match the existing design system for both modes.')">
+          <span class="icon">🌙</span> Dark mode toggle <span class="tool-pill pill-ag">AG</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CLAUDE CODE TAB -->
+  <div class="tab-content" id="tab-cc">
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num cc">1</div>
+        <h2>Add a live news feed to your bento</h2>
+        <span class="badge badge-cc">Claude Code</span>
+      </div>
+      <p class="section-label">Open Claude Code inside your bento folder, then paste this prompt</p>
+      <div class="prompt-block">
+        <div class="prompt-block-header">
+          <span>Prompt</span>
+          <button class="copy-btn" onclick="copyPrompt(this, 'p3')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2v1"/></svg>
+            Copy
+          </button>
+        </div>
+        <div class="prompt-text" id="p3">Read the existing index.html, script.js, and style.css. Then do the following:
+
+1. Add a news card to the bento.
+Add a new card to index.html: a "Live News" section with 5 headline items (title + source). In script.js, add a fetchNews() function that calls http://localhost:3000/api/news and populates the card on load, refreshing every 5 minutes.
+
+2. Build the backend.
+Create server/server.js — an Express server on port 3000 that fetches the latest headlines from BBC News, TechCrunch, and Hacker News RSS feeds using rss-parser. On startup, print each headline to the terminal with chalk: source in color, headline text, time posted. Expose /api/news returning JSON. Enable CORS.
+
+3. Create server/package.json with dependencies: express, rss-parser, chalk, cors.
+
+4. Create start.bat at the root that:
+   - Starts the server (cd server && npm install && node server.js) in the background
+   - Waits 2 seconds for the server to boot
+   - Automatically opens index.html in the default browser</div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon">💡</span>
+        <span>Claude Code reads your existing files and integrates cleanly — it won't break what Antigravity built. Once done, double-click <strong>start.bat</strong> and watch the terminal light up.</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num cc">✦</div>
+        <h2>3 rules to take home</h2>
+      </div>
+      <div class="practices-list">
+        <div class="practice">
+          <span class="practice-num">01</span>
+          <div class="practice-text">
+            <strong>Be specific</strong>
+            <span>The more detail in your prompt, the better the output. Vague prompts produce generic results.</span>
+          </div>
+        </div>
+        <div class="practice">
+          <span class="practice-num">02</span>
+          <div class="practice-text">
+            <strong>Iterate, don't regenerate</strong>
+            <span>First output is never final. Keep prompting — each round gets closer to what you actually want.</span>
+          </div>
+        </div>
+        <div class="practice">
+          <span class="practice-num">03</span>
+          <div class="practice-text">
+            <strong>You're the editor</strong>
+            <span>AI builds fast, but you decide what stays. Think of it as a very fast intern, not a replacement.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span class="modal-icon" id="modalIcon"></span>
+          <span id="modalTitle"></span>
+          <span class="badge" id="modalBadge"></span>
+        </div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-tool-label" id="modalToolLabel"></p>
+        <div class="modal-prompt">
+          <div class="modal-prompt-header">
+            <button class="copy-btn" id="modalCopyBtn" onclick="copyModalPrompt()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2v1"/></svg>
+              Copy
+            </button>
+          </div>
+          <div class="modal-prompt-text" id="modalPromptText"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(tab, btn) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-ag', 'active-cc'));
+      document.getElementById('tab-' + tab).classList.add('active');
+      btn.classList.add('active-' + tab);
+    }
+
+    function copyPrompt(btn, id) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.classList.add('copied');
+        btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Copied`;
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2v1"/></svg> Copy`;
+        }, 2000);
+      });
+    }
+
+    function openModal(title, icon, tool, prompt) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalIcon').textContent = icon;
+      document.getElementById('modalPromptText').textContent = prompt;
+
+      const isAG = tool === 'ag';
+      const badge = document.getElementById('modalBadge');
+      badge.textContent = isAG ? 'Antigravity' : 'Claude Code';
+      badge.className = 'badge ' + (isAG ? 'badge-ag' : 'badge-cc');
+
+      const label = document.getElementById('modalToolLabel');
+      label.textContent = isAG ? 'Paste into Antigravity' : 'Paste into Claude Code (inside your bento folder)';
+
+      document.getElementById('modalOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function closeModalOutside(e) {
+      if (e.target === document.getElementById('modalOverlay')) closeModal();
+    }
+
+    function copyModalPrompt() {
+      const text = document.getElementById('modalPromptText').textContent;
+      const btn = document.getElementById('modalCopyBtn');
+      navigator.clipboard.writeText(text).then(() => {
+        btn.classList.add('copied');
+        btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Copied`;
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2v1"/></svg> Copy`;
+        }, 2000);
+      });
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  </script>
+
+</body>
+</html>
