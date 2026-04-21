@@ -85,6 +85,7 @@
     .tab-btn:hover { color: var(--text); }
     .tab-btn.active-ag { background: var(--ag-glow); color: var(--ag-color); border: 1px solid rgba(79,142,247,0.3); }
     .tab-btn.active-cc { background: var(--cc-glow); color: var(--cc-color); border: 1px solid rgba(249,115,22,0.3); }
+    .tab-btn.active-docs { background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
     .tab-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
 
     .tab-content { display: none; max-width: 820px; margin: 0 auto; }
@@ -336,9 +337,60 @@
     .practice-text strong { display: block; font-size: 0.88rem; margin-bottom: 0.2rem; }
     .practice-text span { font-size: 0.8rem; color: var(--muted); }
 
+    /* RESOURCE LIST */
+    .resource-list { display: flex; flex-direction: column; gap: 0.6rem; }
+    .resource-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 1.1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .resource-card:hover {
+      border-color: var(--ag-color);
+      background: var(--ag-glow);
+      transform: translateX(3px);
+    }
+    .resource-info { display: flex; flex-direction: column; gap: 0.3rem; }
+    .resource-title { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+    .resource-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+    .resource-arrow { color: var(--muted); font-size: 1rem; flex-shrink: 0; transition: color 0.2s; }
+    .resource-card:hover .resource-arrow { color: var(--ag-color); }
+
+    /* TOOLS GRID */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.6rem;
+    }
+    .tool-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      padding: 0.9rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .tool-card:hover {
+      border-color: var(--cc-color);
+      background: var(--cc-glow);
+      transform: translateY(-2px);
+    }
+    .tool-name { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+    .tool-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.4; }
+
     @media (max-width: 600px) {
       .tabs { flex-direction: column; }
       .suggestions-grid { grid-template-columns: 1fr 1fr; }
+      .tools-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
@@ -356,6 +408,9 @@
     </button>
     <button class="tab-btn" onclick="switchTab('cc', this)">
       <span class="tab-dot"></span> Claude Code
+    </button>
+    <button class="tab-btn" onclick="switchTab('docs', this)">
+      <span class="tab-dot"></span> Further Reading
     </button>
   </div>
 
@@ -552,6 +607,118 @@ Create server/server.js — an Express server on port 3000 that fetches the late
 
   </div>
 
+  <!-- FURTHER READING TAB -->
+  <div class="tab-content" id="tab-docs">
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num ag">★</div>
+        <h2>Anthropic Academy — Start Here</h2>
+      </div>
+      <p class="section-label">Free courses with certificates — no paid subscription needed</p>
+      <div class="resource-list">
+        <a class="resource-card" href="https://anthropic.skilljar.com" target="_blank">
+          <div class="resource-info">
+            <span class="resource-title">Anthropic Academy</span>
+            <span class="resource-desc">13 free self-paced courses covering the full Claude ecosystem — from basic usage to API, agents, and MCP servers. Free certificates included.</span>
+          </div>
+          <span class="resource-arrow">→</span>
+        </a>
+        <a class="resource-card" href="https://github.com/anthropics/prompt-eng-interactive-tutorial" target="_blank">
+          <div class="resource-info">
+            <span class="resource-title">Prompt Engineering Interactive Tutorial</span>
+            <span class="resource-desc">Anthropic's official hands-on course. 9 chapters from basics to advanced techniques — chain-of-thought, tool use, real agent patterns. Jupyter notebooks, fully free.</span>
+          </div>
+          <span class="resource-arrow">→</span>
+        </a>
+        <a class="resource-card" href="https://github.com/anthropics/courses" target="_blank">
+          <div class="resource-info">
+            <span class="resource-title">Anthropic Courses on GitHub</span>
+            <span class="resource-desc">All of Anthropic's educational content in one repo — prompt engineering, real-world prompting, evaluations, and more.</span>
+          </div>
+          <span class="resource-arrow">→</span>
+        </a>
+        <a class="resource-card" href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview" target="_blank">
+          <div class="resource-info">
+            <span class="resource-title">Anthropic Prompt Engineering Docs</span>
+            <span class="resource-desc">The official reference — techniques, best practices, examples straight from the people who built Claude.</span>
+          </div>
+          <span class="resource-arrow">→</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num ag">⚡</div>
+        <h2>Vibe Coding</h2>
+      </div>
+      <p class="section-label">Learn to build apps with AI — no prior coding experience needed</p>
+      <div class="resource-list">
+        <a class="resource-card" href="https://www.mygreatlearning.com/academy/learn-for-free/courses/learn-vibe-coding-with-ai-tools" target="_blank">
+          <div class="resource-info">
+            <span class="resource-title">Vibe Coding for Beginners — Great Learning</span>
+            <span class="resource-desc">Free course covering the fundamentals of building with AI tools. No coding knowledge required. Practical exercises included.</span>
+          </div>
+          <span class="resource-arrow">→</span>
+        </a>
+        <a class="resource-card" href="https://lovable.dev/guides/vibe-coding-apps-8-options-for-beginners" target="_blank">
+          <div class="resource-info">
+            <span class="resource-title">Vibe Coding Guide — Lovable</span>
+            <span class="resource-desc">Beginner-friendly breakdown of the vibe coding workflow, tools, and how to think about building with AI.</span>
+          </div>
+          <span class="resource-arrow">→</span>
+        </a>
+        <a class="resource-card" href="https://www.youtube.com/watch?v=Q_FZ800Hm4g" target="_blank">
+          <div class="resource-info">
+            <span class="resource-title">Vibe Coding Tutorial for Beginners 2026 — YouTube</span>
+            <span class="resource-desc">Step-by-step video walkthrough of building a real app with AI from scratch. Great for visual learners.</span>
+          </div>
+          <span class="resource-arrow">→</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num cc">⬡</div>
+        <h2>Tools to Explore Next</h2>
+      </div>
+      <p class="section-label">The broader ecosystem — all have free tiers</p>
+      <div class="tools-grid">
+        <a class="tool-card" href="https://cursor.com" target="_blank">
+          <span class="tool-name">Cursor</span>
+          <span class="tool-desc">AI-powered code editor. Free tier. Great next step after Claude Code.</span>
+        </a>
+        <a class="tool-card" href="https://lovable.dev" target="_blank">
+          <span class="tool-name">Lovable</span>
+          <span class="tool-desc">Prompt → full-stack web app. No code needed. Free tier.</span>
+        </a>
+        <a class="tool-card" href="https://v0.dev" target="_blank">
+          <span class="tool-name">v0 by Vercel</span>
+          <span class="tool-desc">Generate UI components from text. $5 free credits/month.</span>
+        </a>
+        <a class="tool-card" href="https://replit.com" target="_blank">
+          <span class="tool-name">Replit</span>
+          <span class="tool-desc">Build and deploy apps in the browser. AI-assisted. Free tier.</span>
+        </a>
+        <a class="tool-card" href="https://bolt.new" target="_blank">
+          <span class="tool-name">Bolt.new</span>
+          <span class="tool-desc">Full-stack apps from a single prompt. Fast, free to start.</span>
+        </a>
+        <a class="tool-card" href="https://windsurf.com" target="_blank">
+          <span class="tool-name">Windsurf</span>
+          <span class="tool-desc">Agentic AI code editor. Solid free plan. Strong competitor to Cursor.</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
   <!-- MODAL -->
   <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
     <div class="modal" id="modal">
@@ -581,9 +748,9 @@ Create server/server.js — an Express server on port 3000 that fetches the late
   <script>
     function switchTab(tab, btn) {
       document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-ag', 'active-cc'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-ag', 'active-cc', 'active-docs'));
       document.getElementById('tab-' + tab).classList.add('active');
-      btn.classList.add('active-' + tab);
+      btn.classList.add(tab === 'docs' ? 'active-docs' : 'active-' + tab);
     }
 
     function copyPrompt(btn, id) {
